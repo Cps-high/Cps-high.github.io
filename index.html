@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High School Summaries</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="cps.png">
+</head>
+<body>
+    <nav>
+        <img src="cps.png" alt="logo" class="nav-logo">
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>High School Summaries</h1>
+        <p>Select a grade level to view summaries:</p>
+    </header>
+
+    <main class="container">
+        <section class="grade-links-section">
+            <h2>Grade Levels</h2>
+            <div class="grade-links-grid">
+                <div class="grade-link-box"><a href="grade10.html">Grade 10</a></div>
+                <div class="grade-link-box"><a href="grade11.html">Grade 11</a></div>
+                <div class="grade-link-box"><a href="grade12.html">Grade 12</a></div>
+                <div class="grade-link-box"><a href="restofschool.html">Rest of the school</a></div>
+            </div>
+        </section>
+
+        <section class="comments-section">
+            <h2>Comments</h2>
+            <form id="comment-form">
+                <label for="name">Name:</label><br>
+                <input type="text" id="name" name="name" required><br><br>
+
+                <label for="comment">Comment:</label><br>
+                <textarea id="comment" name="comment" rows="4" required></textarea><br><br>
+
+                <button type="submit">Submit Comment</button>
+            </form>
+            <div id="comments-display"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 by Abdulrahman Janahi</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
