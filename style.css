@@ -267,4 +267,48 @@ footer {
         padding: 8px;
         box-sizing: border-box;
     }
+}
+
+.hidden-delete-btn {
+    display: none;
+}
+
+/* Styles for the comment box */
+.comment-box {
+    background-color: tomato; /* Lighter background for the box */
+    border: 1px solid #ddd; /* Subtle border */
+    border-radius: 25px; /* Rounded corners */
+    padding: 15px; /* Inner spacing */
+    margin-bottom: 15px; /* Space between comment boxes */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    overflow-wrap: break-word; /* Prevent long words from overflowing */
+    word-wrap: break-word; /* Prevent long words from overflowing (for older browsers) */
+    /* Animation */
+    animation: wiggle 1.0s infinite ease-in-out; /* Made animation faster */
+    transform-origin: top center; /* Set pivot point to the top center */
+}
+
+/* Keyframes for the wiggle animation (pendulum effect) */
+@keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); } /* Start and end upright */
+    25% { transform: rotate(-5deg); } /* Swing left */
+    75% { transform: rotate(5deg); } /* Swing right */
+}
+
+.comment-box p {
+    margin: 0 0 5px 0; /* Add some space below the paragraph */
+}
+
+.comment-box p:last-child {
+    margin-bottom: 0; /* No bottom margin for the last paragraph in the box */
+}
+
+.comment-box .delete-btn {
+    margin-left: 10px; /* Space out the delete button */
+    padding: 2px 8px; /* Smaller padding for the button */
+    font-size: 0.8em; /* Smaller font size */
+}
+
+.comment-box strong {
+    color: #332D56; /* Keep the name color consistent */
 } 

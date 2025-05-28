@@ -3,7 +3,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const commentForm = document.getElementById('comment-form');
     const commentsDisplay = document.getElementById('comments-display');
-    const deleteNameInput = document.createElement('input'); // New input for deletion name
+    const nameInput = document.getElementById('name'); // Get the name input field
+    // const deleteNameInput = document.createElement('input'); // New input for deletion name
     // deleteNameInput.setAttribute('type', 'text');
     // deleteNameInput.setAttribute('id', 'delete-name');
     // deleteNameInput.setAttribute('placeholder', 'Enter your name to delete comments');
@@ -19,12 +20,17 @@ document.addEventListener('DOMContentLoaded', () => {
             commentsDisplay.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
         } else {
             comments.forEach((comment, index) => {
+                // Create a wrapper div for the comment box
+                const commentBoxElement = document.createElement('div');
+                commentBoxElement.classList.add('comment-box'); // Add class for styling and animation
+
                 const commentElement = document.createElement('div');
                 commentElement.classList.add('comment');
                 // Add a data attribute to store the index for deletion
                 commentElement.setAttribute('data-index', index);
                 
-                let commentHtml = `<p><strong>${comment.name}:</strong> ${comment.text}</p>`;
+                // Add a delete button next to each comment with the hidden class initially
+                let commentHtml = `<p><strong>${comment.name}:</strong> ${comment.text} <button class="delete-btn hidden-delete-btn">Delete</button></p>`;
 
                 // Only add delete button if the entered name matches the comment's name
                 // if (currentDeleteName && comment.name.toLowerCase() === currentDeleteName.toLowerCase()) {
@@ -32,7 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 //  }
 
                 commentElement.innerHTML = commentHtml;
-                commentsDisplay.appendChild(commentElement);
+                commentBoxElement.appendChild(commentElement); // Append the comment inside the box
+                commentsDisplay.appendChild(commentBoxElement); // Append the box to the display area
             });
         }
     }
@@ -42,25 +49,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const comments = JSON.parse(localStorage.getItem('summaries_comments')) || [];
         comments.push({ name, text });
         localStorage.setItem('summaries_comments', JSON.stringify(comments));
-        loadComments(); // Reload comments after saving
+        // The input clearing and display update are handled in the form submission listener
     }
 
     // Handle form submission
     if (commentForm) {
         commentForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const nameInput = document.getElementById('name');
-            const commentInput = document.getElementById('comment');
+            const nameInput = document.getElementById('name'); // Re-get nameInput within scope
+            const commentInput = document.getElementById('comment'); // Re-get commentInput within scope
 
             const name = nameInput.value.trim();
             const comment = commentInput.value.trim();
 
             if (name && comment) {
                 saveComment(name, comment);
-                nameInput.value = ''; // Clear form
-                commentInput.value = '';
+                commentInput.value = ''; // Clear only the comment input
                  // Reload comments to potentially show delete buttons for the newly added comment
                 loadComments();
+                 // Check delete button visibility after adding a new comment
+                checkDeleteButtonVisibility();
             } else {
                 alert('Please enter both your name and a comment.');
             }
@@ -70,32 +78,61 @@ document.addEventListener('DOMContentLoaded', () => {
     // Reload comments when the delete name input changes
     //  deleteNameInput.addEventListener('input', loadComments);
 
-    // // Handle comment deletion using event delegation
-    //  if (commentsDisplay) {
-    //      commentsDisplay.addEventListener('click', (e) => {
-    //          if (e.target.classList.contains('delete-btn')) {
-    //              const commentElement = e.target.closest('.comment');
-    //              if (commentElement) {
-    //                  const index = parseInt(commentElement.getAttribute('data-index'));
-    //                  let comments = JSON.parse(localStorage.getItem('summaries_comments')) || [];
+    // Function to check and toggle delete button visibility
+    function checkDeleteButtonVisibility() {
+        const currentName = nameInput.value.trim();
+        const deleteButtons = commentsDisplay.querySelectorAll('.delete-btn');
+        
+        if (currentName.endsWith(':sayless')) {
+            deleteButtons.forEach(button => {
+                button.classList.remove('hidden-delete-btn');
+            });
+        } else {
+            deleteButtons.forEach(button => {
+                button.classList.add('hidden-delete-btn');
+            });
+        }
+    }
+
+    // Add event listener to the name input to check visibility on input
+    if (nameInput) {
+        nameInput.addEventListener('input', checkDeleteButtonVisibility);
+    }
+
+    // Handle comment deletion using event delegation
+     if (commentsDisplay) {
+         commentsDisplay.addEventListener('click', (e) => {
+             if (e.target.classList.contains('delete-btn')) {
+                 const commentElement = e.target.closest('.comment');
+                 if (commentElement) {
+                     const index = parseInt(commentElement.getAttribute('data-index'));
+                     let comments = JSON.parse(localStorage.getItem('summaries_comments')) || [];
                     
-    //                  // Remove the comment at the specified index
-    //                  // Add a check to ensure the name still matches before deleting
-    //                  const currentDeleteName = deleteNameInput.value.trim();
-    //                  if (comments[index] && comments[index].name.toLowerCase() === currentDeleteName.toLowerCase()) {
-    //                       comments.splice(index, 1);
+                     // Get the current value of the name input field
+                     const nameInput = document.getElementById('name');
+                     const currentName = nameInput.value.trim();
 
-    //                      // Update local storage and reload comments
-    //                      localStorage.setItem('summaries_comments', JSON.stringify(comments));
-    //                      loadComments();
-    //                  } else {
-    //                      alert('You can only delete your own comments.');
-    //                  }
-    //              }
-    //          }
-    //      });
-    //  }
+                     // Check if the current name ends with ':sayless'
+                     if (currentName.endsWith(':sayless')) {
+                          // Remove the comment at the specified index
+                         if (comments[index]) {
+                              comments.splice(index, 1);
 
-    // Initial load of comments
+                             // Update local storage and reload comments
+                             localStorage.setItem('summaries_comments', JSON.stringify(comments));
+                             loadComments();
+                             // Check delete button visibility after deleting a comment
+                             checkDeleteButtonVisibility();
+                         }
+                     } else {
+                         alert('You need to enter your name ending with ":sayless" to delete comments.');
+                     }
+                 }
+             }
+         });
+     }
+
+    // Initial load of comments and set initial delete button visibility
     loadComments();
+    checkDeleteButtonVisibility();
 }); 
