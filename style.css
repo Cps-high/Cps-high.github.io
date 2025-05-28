@@ -94,14 +94,14 @@ header {
     padding: 0 20px;
 }
 
-.grade-links-section,
+.grade-links-section,.grade-section,
 .comments-section {
     background: #fff;
     margin-bottom: 20px;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
+    max-width: 400px;
     margin-left: auto;
     margin-right: auto;
 }
